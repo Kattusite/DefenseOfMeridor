@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -681,6 +682,9 @@ public class MeriPanel extends JPanel {
 				"","Name","Health","Attack","","Defence","",""
 		};
 
+		final private int OUTLINE_WIDTH = 3; // horizontal pixel thickness of the outline
+		final private int OUTLINE_HEIGHT = 2; // horizontal pixel thickness of the outline
+
 		private UnitDisplay(){
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			updateAllyData();
@@ -695,6 +699,16 @@ public class MeriPanel extends JPanel {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setPreferredSize(new Dimension(400,400));
 		}
+		private ImageIcon outlineImageIcon(ImageIcon orig, Color ol) {
+			int nw = orig.getIconWidth() + OUTLINE_WIDTH * 2;
+			int nh = orig.getIconHeight() + OUTLINE_HEIGHT * 2 + 1; // +1 to fix bottom padding
+			BufferedImage bufim = new BufferedImage(nw, nw, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bufim.getGraphics();
+			g.setColor(ol);
+			g.fillRect(0, 0, nw, nh);
+			orig.paintIcon(null, g, OUTLINE_WIDTH, OUTLINE_WIDTH);
+			return new ImageIcon(bufim);
+		}
 		/**
 		 * Updates every tick and on init
 		 * may need to adjust weapon name length
@@ -703,7 +717,8 @@ public class MeriPanel extends JPanel {
 			Object[][]allies=new Object[ally.size()][];
 			for (int i=0;i<ally.size();i++){
 				Object[]mstats=new Object[8];
-				mstats[0]=MConst.imageIconMap.get(ally.get(i).getSpeciesID());
+				ImageIcon portrait = MConst.imageIconMap.get(ally.get(i).getSpeciesID());
+				mstats[0]=outlineImageIcon(portrait, MeriPet.OUTLINE[i]); // add colored outline
 				mstats[1]=ally.get(i).getNameNRank();
 				mstats[2]=ally.get(i).getDmgNHealth();
 				mstats[3]=ally.get(i).getAttackString();
@@ -742,8 +757,8 @@ public class MeriPanel extends JPanel {
 					return text;
 				}
 			};
-			allytable.setRowHeight(30);
-			allytable.getColumnModel().getColumn(0).setPreferredWidth(34);
+			allytable.setRowHeight(30 + OUTLINE_HEIGHT*2);
+			allytable.getColumnModel().getColumn(0).setPreferredWidth(34 + OUTLINE_WIDTH*2);
 			allytable.getColumnModel().getColumn(1).setPreferredWidth(190);
 			allytable.getColumnModel().getColumn(4).setPreferredWidth(38);
 			allytable.getColumnModel().getColumn(6).setPreferredWidth(38);
@@ -759,7 +774,8 @@ public class MeriPanel extends JPanel {
 			Object[][]foes=new Object[foe.size()][];
 			for (int i=0;i<foe.size();i++){
 				Object[]mstats=new Object[8];
-				mstats[0]=MConst.imageIconMap.get(foe.get(i).getSpeciesID());
+				ImageIcon portrait = MConst.imageIconMap.get(foe.get(i).getSpeciesID());
+				mstats[0]=outlineImageIcon(portrait, MeriPet.OUTLINE[i]); // add colored outline
 				mstats[1]=foe.get(i).name;
 				mstats[2]=foe.get(i).getCurrHealth()+"";
 				mstats[3]=foe.get(i).getAttackString();
@@ -791,8 +807,8 @@ public class MeriPanel extends JPanel {
 					return text;
 				}
 			};
-			foetable.setRowHeight(30);
-			foetable.getColumnModel().getColumn(0).setPreferredWidth(34);
+			foetable.setRowHeight(30 + OUTLINE_HEIGHT*2);
+			foetable.getColumnModel().getColumn(0).setPreferredWidth(34 + OUTLINE_WIDTH*2);
 			foetable.getColumnModel().getColumn(1).setPreferredWidth(190);
 			foetable.getColumnModel().getColumn(4).setPreferredWidth(38);
 			foetable.getColumnModel().getColumn(6).setPreferredWidth(38);

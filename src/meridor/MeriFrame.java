@@ -29,7 +29,7 @@ public class MeriFrame implements ActionListener {
 	private JMenuItem mitem,save,load,newcampaign,quit;
 	private JFrame frame;
 	private final JFileChooser fc=new JFileChooser();
-	
+
 	/**
 	 * Initializes the items, call the build method to start the program UI
 	 */
@@ -40,7 +40,7 @@ public class MeriFrame implements ActionListener {
 
 	public JFrame buildFrame(){
 		frame=new JFrame();
-		//		try { 
+		//		try {
 		//	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		//	} catch (Exception e) {
 		//	    e.printStackTrace();
@@ -65,10 +65,10 @@ public class MeriFrame implements ActionListener {
 			// handle exception
 			System.out.println("4");
 		}
-		
+
 		mpanel=new MeriPanel();
 		mbar=new JMenuBar();
-		
+
 		menu=new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_F);
 		newcampaign=new JMenuItem("New");
@@ -90,13 +90,13 @@ public class MeriFrame implements ActionListener {
 		menu.add(load);
 		menu.add(quit);
 //		menu.add(mitem);
-		
+
 		mbar.add(menu);
 
 		frame.setLayout(new FlowLayout());
 		frame.add(mpanel);
 		frame.setJMenuBar(mbar);
-		
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle(title);
 		frame.setVisible(true);
@@ -118,7 +118,7 @@ public class MeriFrame implements ActionListener {
 			if (choice==JOptionPane.YES_OPTION){
 				mpanel.startNewCampaign();
 			}
-		} 
+		}
 		else if (e.getSource()==save){
 			if (showSaveWarning){
 				showSaveWarning=false;
@@ -127,7 +127,7 @@ public class MeriFrame implements ActionListener {
 
 			initSaveDirectory();
 			int returnval=fc.showSaveDialog(frame);
-			
+
 			if (returnval==JFileChooser.APPROVE_OPTION){
 				File file=fc.getSelectedFile();
 				boolean canwrite=!file.exists();
@@ -136,7 +136,7 @@ public class MeriFrame implements ActionListener {
 					if (result==JOptionPane.YES_OPTION){
 						canwrite=true;
 					}
-				} 
+				}
 				if (canwrite){
 					try{
 						OutputStream osfile=new FileOutputStream(file);
@@ -147,19 +147,19 @@ public class MeriFrame implements ActionListener {
 						} finally {
 							output.close();
 						}
-					} 
+					}
 					catch(IOException ex){
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(frame, "File save error!");
-					} 					
+					}
 				}
 			}
 		}
 		else if (e.getSource()==load){
-			
+
 			initSaveDirectory();
 			int returnval=fc.showOpenDialog(frame);
-			
+
 			if (returnval==JFileChooser.APPROVE_OPTION){
 				File file=fc.getSelectedFile();
 				try {
@@ -172,10 +172,10 @@ public class MeriFrame implements ActionListener {
 					}finally {
 						input.close();
 					}
-				} 
+				}
 				catch(IOException ex){
 					JOptionPane.showMessageDialog(frame, "File Load error!");
-				} 
+				}
 				catch (ClassNotFoundException e1) {
 					JOptionPane.showMessageDialog(frame, "File could not be loaded: filetype may be incorrect.");
 					e1.printStackTrace();
@@ -191,6 +191,5 @@ public class MeriFrame implements ActionListener {
 //			mpanel.toggleActive();
 			mpanel.displayVictoryPanel();
 		}
-		
 	}
 }
