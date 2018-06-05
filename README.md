@@ -1,36 +1,39 @@
 # defense-of-meridor
 
-To - do
+To-done
 =======
-
-## Troop Selecting / Outlining
-* Make it so troops that were just converted this turn can still move.
 * Grey out a troop when it is selected
 * Make it so clicking on one troop when another is selected will select the second troop (assuming the currently selected troop cannot heal/unseal tp)
 * Desired behavior when running out of moves: Deselect current pet, disable further selection of pets.
+* When you click on the battlemap and have no moves left, prompt to end turn
+* Selecting a pet after you run out of moves causes pet to remain greyed out. More to the point, clicking on a pet after you run out of moves does not deselect it.
+
+To - do
+=======
+## Troop Selecting / Outlining
+* Make it so troops that were just converted this turn can still move.
 * Troop outline colors should also be shown in the troop info screen on the right hand side of the MeriFrame.
 * When the game has been won, remove all troop outlines.
 
 ## General QoL fixes
 * Make it more obvious when no turns remain.
-* Make the combat log more visually obvious (e.g. boldface)
 * Add back colors for each rank (Villager, Defender, ...)
 * Make the outline around each game tile about a pixel smaller (or alternatively make the black lines between cells a little thicker)
 * Better helper functions (e.g. for checking location / equality of pets)
 * toString() for MeriPet
 * The "Victory Click the Map to Continue" screen could use a semi-transparent background.
-* When you click on the battlemap and have no moves left, prompt to end turn
 
 ## Battlelog changes
 * Add a battlelog message for finding the artifact.
 * Change battlelog from textarea to textpane
+* Make the combat log more visually obvious (e.g. boldface)
 
 ## General Bugs
 * There is a missed case if it is possible to both heal TPseal and healseal, so it is not always possible to heal correctly.
 * The error text is wrong when trying to select fewer than 5 pets for the next battle.
 * Selecting / Unselecting a pet causes the mission info to wiggle back and forth a little bit.
 * Selecting a pet technically redraws the grey "selected" overlay box a pixel too large, but it looks fine so I didn't bother to change it.
-* Selecting a pet after you run out of moves causes pet to remain greyed out. More to the point, clicking on a pet after you run out of moves does not deselect it.
+
 
 Dev Documentation
 =================
