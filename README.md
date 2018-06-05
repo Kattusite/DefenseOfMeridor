@@ -20,11 +20,8 @@ To - do
 * Make it more obvious when no turns remain.
 * Add back colors for each rank (Villager, Defender, ...)
 * Make the outline around each game tile about a pixel smaller (or alternatively make the black lines between cells a little thicker)
-* Better helper functions (e.g. for checking location / equality of pets)
-* toString() for MeriPet
 * The "Victory Click the Map to Continue" screen could use a semi-transparent background.
 * Allow "click to restart" on game loss, instead of "why not restart from the menu?"
-* Remove a whooooole lot of magic numbers and replace with constants.
 
 ## Battlelog changes
 * Add a battlelog message for finding the artifact.
@@ -36,6 +33,12 @@ To - do
 * The error text is wrong when trying to select fewer than 5 pets for the next battle.
 * Selecting / Unselecting a pet causes the mission info to wiggle back and forth a little bit.
 * Selecting a pet technically redraws the grey "selected" overlay box a pixel too large, but it looks fine so I didn't bother to change it.
+* Images do not load at all from the jar file, instead they must load from a local folder named "MeriImages"
+
+## Programming QoL fixes
+* Better helper functions (e.g. for checking location / equality of pets)
+* toString() for MeriPet (and others)
+* Remove a whooooole lot of magic numbers and replace with constants.
 
 
 Dev Documentation
