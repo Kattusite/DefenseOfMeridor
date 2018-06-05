@@ -8,12 +8,12 @@ To-done
 * When you click on the battlemap and have no moves left, prompt to end turn
 * Selecting a pet after you run out of moves causes pet to remain greyed out. More to the point, clicking on a pet after you run out of moves does not deselect it.
 * Make it so troops that were just converted this turn can still move.
+* When the game has been won, remove all troop outlines.
 
 To - do
 =======
 ## Troop Selecting / Outlining
 * Troop outline colors should also be shown in the troop info screen on the right hand side of the MeriFrame.
-* When the game has been won, remove all troop outlines.
 
 ## General QoL fixes
 * Make it more obvious when no turns remain.
@@ -22,6 +22,7 @@ To - do
 * Better helper functions (e.g. for checking location / equality of pets)
 * toString() for MeriPet
 * The "Victory Click the Map to Continue" screen could use a semi-transparent background.
+* Allow "click to restart" on game loss, instead of "why not restart from the menu?"
 
 ## Battlelog changes
 * Add a battlelog message for finding the artifact.

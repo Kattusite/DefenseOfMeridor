@@ -583,40 +583,43 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	public void paintComponent (Graphics g){
 		super.paintComponent(g);
 		this.setBackground(Color.white);
+		boolean gameOver = parent.checkGameWon() || parent.checkGameLost();
 		for (int i=0;i<MAPDIM;i++){
 			for (int j=0;j<MAPDIM;j++){
 				boolean issel=false;
-				// Draw the colored outlines around ally / foe troops
-				if (isFoePetTerrain(tilemap[i][j].terrain)){
-					for (int k=0; k<parent.foe.size();k++) {
-						if (Arrays.equals(parent.foe.get(k).getLocation(),new int[]{i,j})) {
-							tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
-							break;
+				// Draw the colored outlines around ally / foe troops if game not over
+				if (!gameOver) {
+					if (isFoePetTerrain(tilemap[i][j].terrain)){
+						for (int k=0; k<parent.foe.size();k++) {
+							if (Arrays.equals(parent.foe.get(k).getLocation(),new int[]{i,j})) {
+								tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
+								break;
+							}
 						}
 					}
-				}
-				if (isAllyPetTerrain(tilemap[i][j].terrain)){
-					//if the terrain is of an ally, find the ally, check if it
-					//has exhausted its moves, and then depict appropriately
-					for (int k=0;k<parent.ally.size();k++){
-						if (Arrays.equals(parent.ally.get(k).getLocation(),new int[]{i,j})) {
-							// Draw a colored outline around ally troop
-							if (!parent.ally.get(k).hasMove()){
-								tilemap[i][j].drawMoveDepleted(g);
-							} else {
-								tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
+					if (isAllyPetTerrain(tilemap[i][j].terrain)){
+						//if the terrain is of an ally, find the ally, check if it
+						//has exhausted its moves, and then depict appropriately
+						for (int k=0;k<parent.ally.size();k++){
+							if (Arrays.equals(parent.ally.get(k).getLocation(),new int[]{i,j})) {
+								// Draw a colored outline around ally troop
+								if (!parent.ally.get(k).hasMove()){
+									tilemap[i][j].drawMoveDepleted(g);
+								} else {
+									tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
+								}
+								// Flag selected pets to be greyed out later.
+								if (isSelected(parent.ally.get(k))) {
+									issel=true;
+								}
+								break;
 							}
-							// Flag selected pets to be greyed out later.
-							if (isSelected(parent.ally.get(k))) {
-								issel=true;
-							}
-							break;
 						}
 					}
 				}
 				// Draw the tile, greying out if selected.
 				tilemap[i][j].draw(g);
-				if (issel) {
+				if (issel && !gameOver) {
 					tilemap[i][j].drawSelected(g);
 				}
 			}
