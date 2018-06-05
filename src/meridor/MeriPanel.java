@@ -48,7 +48,7 @@ public class MeriPanel extends JPanel {
 	public Campaign campaign;
 	public MeriPet selected;
 	public int selectedEquipID;
-	
+
 	public final static Dimension initSize=new Dimension(900,603);
 
 	ArrayList<String> battlelogtext=new ArrayList<String>(Arrays.asList(clearlogtext));
@@ -75,9 +75,9 @@ public class MeriPanel extends JPanel {
 
 		ally=new ArrayList<MeriPet>();
 		foe=new ArrayList<MeriPet>();
-		
+
 		ei=new EquipInfo();
-		
+
 		initIntroScreen();
 	}
 	public void initIntroScreen (){
@@ -89,7 +89,7 @@ public class MeriPanel extends JPanel {
 		c.gridx=0;
 		c.gridy=0;
 		c.gridheight=GridBagConstraints.RELATIVE;
-		
+
 		ip=new IntroPanel();
 		add (ip,c);
 	}
@@ -109,7 +109,7 @@ public class MeriPanel extends JPanel {
 		placePets();
 		bm.updatePetLocations(getPetLocations());
 		if (!campaign.treasureCollected){
-			bm.placeTreasure(campaign.getTreasure());			
+			bm.placeTreasure(campaign.getTreasure());
 		}
 		bm.placePotions(campaign.getPotion());
 		int[]itemList=campaign.getItemList();
@@ -185,7 +185,7 @@ public class MeriPanel extends JPanel {
 
 			/*
 			 * this is ridiculously hacky and could be avoided if I just
-			 * wrote a custom tablemodel 
+			 * wrote a custom tablemodel
 			 */
 			remove(um);
 			GridBagConstraints c=new GridBagConstraints();
@@ -250,10 +250,12 @@ public class MeriPanel extends JPanel {
 		selected=m;
 		im.updatePetMaxMoves();
 		im.updateDeselect();
+		update();
 	}
 	/**
 	 * Implementation to do whatever necessary to destroy a village
 	 * May change later
+	 * NOTE: The actual text from the original was "A village has been sacked!"
 	 */
 	public void razeVillage(){
 		villagesLeft--;
@@ -324,7 +326,7 @@ public class MeriPanel extends JPanel {
 				//split the priorities of dark lords and invaders
 				//dark lords attempt to move down first and attack if they cannot
 				//invaders attack first and move down if there are no foes in range
-				
+
 				//both invader/dark lord will use the sme algorithm to check for targets
 				ArrayList<MeriPet> targets=bm.findNextFoeTarget(chosen.getLocation()[0], chosen.getLocation()[1]);
 				ArrayList<MeriPet> horitargets=bm.findHoriFoeTarget(chosen.getLocation()[0], chosen.getLocation()[1]);
@@ -340,7 +342,7 @@ public class MeriPanel extends JPanel {
 					} else if (!teleseal && (sealtarget.canHeal() || sealtarget.canLightning())){
 						updateBattleLog(MeriPet.castHealSeal(chosen, sealtarget));
 					}
-					
+
 					ArrayList<MeriTile>below=bm.getPassableBelow(chosen.getLocation()[0], chosen.getLocation()[1]);
 					//if at or below row 7, move to a nearby village or attack if cannot move
 					if (chosen.getLocation()[1]>=7){
@@ -351,7 +353,7 @@ public class MeriPanel extends JPanel {
 							//CONSIDER REPLACING IT
 							ArrayList<int[]>path=bm.findOneTilePath(chosen.getLocation(), new int[]{chosen.getLocation()[0]+direction*2,chosen.getLocation()[1]});
 							if (path.size()>0){
-								bm.movePet(chosen, path.get(0));								
+								bm.movePet(chosen, path.get(0));
 							} else if (targets.size()>0) {
 								//attack?
 								MeriPet target=targets.get(0);
@@ -381,7 +383,7 @@ public class MeriPanel extends JPanel {
 				}
 				//normal invader decision tree
 				else {
-					//second priority action: kill npets 
+					//second priority action: kill npets
 					if (!targets.isEmpty()){
 						MeriPet target=targets.get(0);
 						updateBattleLog(MeriPet.attack(chosen, target));
@@ -409,7 +411,7 @@ public class MeriPanel extends JPanel {
 							//and one would lead the pet out of the path of villages
 							ArrayList<int[]>path=bm.findOneTilePath(chosen.getLocation(), new int[]{chosen.getLocation()[0],chosen.getLocation()[1]+2});
 							if (path.size()==1){
-								bm.movePet(chosen, path.get(0));							
+								bm.movePet(chosen, path.get(0));
 							} else {
 								int [] idealmoves=null;
 								if (seekvillage==1){
@@ -428,7 +430,7 @@ public class MeriPanel extends JPanel {
 									path=bm.findOneTilePath(chosen.getLocation(), idealmoves);
 									if (path.size()>0){
 										bm.movePet(chosen, path.get(0));
-//										System.out.println(chosen.getLocation()[0]+","+chosen.getLocation()[1]+" d:"+idealmoves[0]+","+idealmoves[1]);								
+//										System.out.println(chosen.getLocation()[0]+","+chosen.getLocation()[1]+" d:"+idealmoves[0]+","+idealmoves[1]);
 									} else {
 										System.out.println(chosen.name+" failed to move...");
 									}
@@ -453,22 +455,22 @@ public class MeriPanel extends JPanel {
 							if (chosen.getLocation()[1]<6){
 								ArrayList<int[]>path=bm.findOneTilePath(chosen.getLocation(), new int[]{chosen.getLocation()[0],chosen.getLocation()[1]+2});
 								if (path.size()>0){
-									bm.movePet(chosen, path.get(0));								
+									bm.movePet(chosen, path.get(0));
 								}
 							} else if (chosen.getLocation()[1]>7){
 								//hack to get people out of the bottom rows if there are no villages nearby
 								ArrayList<int[]>path=bm.findOneTilePath(chosen.getLocation(), new int[]{chosen.getLocation()[0],chosen.getLocation()[1]-2});
 								if (path.size()>0){
 									System.out.println(chosen.name+" somehow reached the bottom");
-									bm.movePet(chosen, path.get(0));								
-								}					
+									bm.movePet(chosen, path.get(0));
+								}
 							} else {
 								//find nearest column with village and move in that direction
 								int direction=bm.getNearestColumnMultiplier(chosen.getLocation()[0]);
 								if (direction==1 || direction==-1){
 									ArrayList<MeriTile>path=bm.getAdjBelow(chosen.getLocation()[0],chosen.getLocation()[1],direction);
 									if (path.size()>0){
-										bm.movePet(chosen, new int[]{path.get(0).getGridx(),path.get(0).getGridy()});								
+										bm.movePet(chosen, new int[]{path.get(0).getGridx(),path.get(0).getGridy()});
 									}
 								}
 							}
@@ -488,7 +490,7 @@ public class MeriPanel extends JPanel {
 	 * call this after a move is registered in the battlemap
 	 * decrements the movesleft (unless special move is made)
 	 * decrements selected's moves (unless special move is made)
-	 * 
+	 *
 	 * consider passing a parameter: whether the action consumes a pet's moves
 	 */
 	public void resolvePlayerMove (){
@@ -518,21 +520,21 @@ public class MeriPanel extends JPanel {
 	/**
 	 * Turn off the map
 	 * advance the campaign counter
-	 * 
+	 *
 	 * If the game is won, show the victory screen
 	 */
 	public void resolveGame(){
 		if (campaign.checkCampaignComplete()){
 			displayVictoryPanel();
 		} else {
+			toggleActive();
+			campaign.allies=ally;
 			campaign.advance();
 			if (campaign.currentBattle==0){
 				for (int i=0;i<ally.size();i++){
 					ally.get(i).promoted=false;
 				}
 			}
-			toggleActive();
-			campaign.allies=ally;
 		}
 	}
 	/**
@@ -560,7 +562,7 @@ public class MeriPanel extends JPanel {
 		if (victory){
 			remove(fwp);
 		}
-		
+
 		GridBagConstraints c=new GridBagConstraints();
 		c.weightx=0.5;
 		c.fill=GridBagConstraints.BOTH;
@@ -666,10 +668,10 @@ public class MeriPanel extends JPanel {
 		JTable allytable, foetable;
 
 		final private String[] ALLYCOLS={
-				"","Name/Rank","Health","Attack","","Defence","","Saves"	
+				"","Name/Rank","Health","Attack","","Defence","","Saves"
 		};
 		final private String[] FOECOLS={
-				"","Name","Health","Attack","","Defence","",""	
+				"","Name","Health","Attack","","Defence","",""
 		};
 
 		private UnitDisplay(){
@@ -716,17 +718,10 @@ public class MeriPanel extends JPanel {
 					java.awt.Point p = e.getPoint();
 					int rowIndex=rowAtPoint(p);
 					int colIndex=columnAtPoint(p);
-					
+
 					try {
 						if (colIndex==0 && ally !=null && ally.size()>rowIndex){
 							text=(ally.get(rowIndex).getSpeciesName());
-						}
-						else if (colIndex==1 && ally !=null && ally.size()>rowIndex){
-							String isPromoted=" has not yet been promoted this mission";
-							if (ally.get(rowIndex).promoted){
-								isPromoted=" has already been promoted this mission";
-							}
-							text=(ally.get(rowIndex).name+isPromoted);
 						}
 						else if (colIndex==4 && ally !=null && ally.size()>rowIndex){
 							text=MConst.getEquipToolTipStats(ally.get(rowIndex).weapon);
@@ -778,7 +773,7 @@ public class MeriPanel extends JPanel {
 					java.awt.Point p = e.getPoint();
 					int rowIndex=rowAtPoint(p);
 					int colIndex=columnAtPoint(p);
-					
+
 					try {
 						if (colIndex==0 && foe !=null && foe.size()>rowIndex){
 							text=(foe.get(rowIndex).getSpeciesName());
@@ -808,14 +803,14 @@ public class MeriPanel extends JPanel {
 	/**
 	 * For editing the team out of battle
 	 * 2 jtables side by side?
-	 * 
+	 *
 	 * take info in the ally array and split it out
 	 * two tables, one for name/select, one for stats
 	 */
 	private class SelectParty extends JPanel implements ActionListener, TableModelListener {
 
 		final private String[] STATCOLS={
-				"Name","Selected","","Rank","Health","Attack","","Defence","","Saves"	
+				"Name","Selected","","Rank","Health","Attack","","Defence","","Saves"
 		};
 
 		JLabel shieldicon,shieldtitle;
@@ -829,13 +824,13 @@ public class MeriPanel extends JPanel {
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			JPanel toppanel=new JPanel();
 			JPanel bottompanel=new JPanel();
-			
+
 			bottompanel.setLayout(new BoxLayout(bottompanel, BoxLayout.Y_AXIS));
 			bottompanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			bottompanel.setBackground(Color.white);
 			shieldicon=new JLabel(new ImageIcon(MConst.shieldMap.get(MConst.SHIELDTITLES[0])));
 			shieldtitle=new JLabel(MConst.SHIELDTITLES[0]);
-			
+
 			confirmteam=new JButton("Confirm Team Selection");
 			confirmteam.addActionListener(this);
 			confirmteam.setMnemonic(KeyEvent.VK_C);
@@ -845,7 +840,7 @@ public class MeriPanel extends JPanel {
 			shieldtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 			bottompanel.add(confirmteam);
 			confirmteam.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
+
 			JLabel spinstruction=new JLabel("Only the selected (checked) pets will go to the next mission (Max 5). Unselected pets will return to their families.");
 			JLabel rninstruction=new JLabel("Doubleclick a pet's name to rename it.");
 
@@ -855,7 +850,7 @@ public class MeriPanel extends JPanel {
 			selector.setFillsViewportHeight(true);
 
 			toppanel.setLayout(new BoxLayout(toppanel, BoxLayout.Y_AXIS));
-			
+
 			add (spinstruction);
 			add (rninstruction);
 			add (toppanel);
@@ -868,7 +863,7 @@ public class MeriPanel extends JPanel {
 			add (Box.createHorizontalGlue());
 			add (Box.createHorizontalGlue());
 			add (bottompanel);
-			
+
 
 
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -887,7 +882,7 @@ public class MeriPanel extends JPanel {
 
 			shieldicon.setIcon(new ImageIcon(MConst.shieldMap.get(MConst.SHIELDTITLES[titleindex])));
 			shieldtitle.setText(MConst.SHIELDTITLES[titleindex]);
-			
+
 			allyname=new Object[ally.size()][];
 			petchosen=new boolean[ally.size()];
 			for (int i=0;i<ally.size();i++){
@@ -922,14 +917,7 @@ public class MeriPanel extends JPanel {
 					int rowIndex=rowAtPoint(p);
 					int colIndex=columnAtPoint(p);
 					try {
-						if ((colIndex==0 || colIndex==3) && ally !=null && ally.size()>rowIndex){
-							String isPromoted=" has not yet been promoted this mission";
-							if (ally.get(rowIndex).promoted){
-								isPromoted=" has already been promoted this mission";
-							}
-							text=(ally.get(rowIndex).name+isPromoted);
-						}
-						else if (colIndex==2 && ally !=null && ally.size()>rowIndex){
+						if (colIndex==2 && ally !=null && ally.size()>rowIndex){
 							text=(ally.get(rowIndex).getSpeciesName());
 						}
 						else if (colIndex==6 && ally !=null && ally.size()>rowIndex){
@@ -967,11 +955,17 @@ public class MeriPanel extends JPanel {
 			System.out.println(count);
 			return count==5;
 		}
-
+		/*
+		 *TODO delate this method
+		 */
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+//			updateStatData();
+		}
 		/*
 		 * (non-Javadoc)
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 * 
+		 *
 		 * enforces the five character limit
 		 */
 		public void actionPerformed(ActionEvent e) {
@@ -1005,6 +999,7 @@ public class MeriPanel extends JPanel {
 				ally.get(row).name=(String)((DefaultTableModel)e.getSource()).getValueAt(row, col);
 				campaign.allies.get(row).name=(String)((DefaultTableModel)e.getSource()).getValueAt(row, col);
 			}
+//			System.out.println(petchosen[row]);
 		}
 	}
 	/**
@@ -1054,13 +1049,13 @@ public class MeriPanel extends JPanel {
 		private InfoDisplay(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			
+
 			JLabel iteminfolabel=new JLabel("Click for item info:");
 			equipinfobuttons=new ArrayList<JButton>();
 			equipsdisplayed=new ArrayList<Integer>();
 			buttonpanel=new JPanel();
 			buttonpanel.setPreferredSize(new Dimension(400,50));
-			
+
 			treasurefoundlabel=new JLabel("Lost Item Found: ");
 			petmaxlabel=new JLabel("Current Pet's Moves:");
 			missionlabel=new JLabel("---");
@@ -1070,7 +1065,7 @@ public class MeriPanel extends JPanel {
 			endturnbutton.setMnemonic(KeyEvent.VK_E);
 			deselectbutton=new JButton("Unselect Current Pet:");
 			deselectbutton.setMnemonic(KeyEvent.VK_U);
-			
+
 			endturnbutton.addActionListener(this);
 			deselectbutton.addActionListener(this);
 
@@ -1078,12 +1073,12 @@ public class MeriPanel extends JPanel {
 			missionlabel.setAlignmentX(CENTER_ALIGNMENT);
 			add(treasurefoundlabel);
 			treasurefoundlabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
+
 			add(iteminfolabel);
 			iteminfolabel.setAlignmentX(CENTER_ALIGNMENT);
 			add(buttonpanel);
 			buttonpanel.setAlignmentX(CENTER_ALIGNMENT);
-			
+
 			add(petmaxlabel);
 			petmaxlabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			add(movesleftlabel);
@@ -1174,9 +1169,9 @@ public class MeriPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	private class EquipInfo extends JFrame implements ActionListener{
-		
+
 		/**
 		 * item icon
 		 * text
@@ -1187,7 +1182,7 @@ public class MeriPanel extends JPanel {
 		private final String ATTACKBASE="Attack Bonus: +";
 		private final String DEFENSEBASE="Defense Bonus: +";
 		private final String SBBASE="In the hands of a ";
-		
+
 		public EquipInfo(){
 			setLayout(new BorderLayout());
 			JPanel inner=new JPanel();
@@ -1203,12 +1198,12 @@ public class MeriPanel extends JPanel {
 			JPanel holder=new JPanel();
 			holder.setLayout(new BoxLayout(holder, BoxLayout.Y_AXIS));
 			holder.setBackground(Color.white);
-			
+
 			itemIcon=new JLabel(MConst.imageIconMap.get(-1));
 			itemIcon.setAlignmentX(Component.LEFT_ALIGNMENT);
 			itemName=new JLabel("");
 			itemName.setAlignmentX(Component.LEFT_ALIGNMENT);
-			
+
 			itemDesc=new JTextArea("\n\n\n\n\n");
 			itemDesc.setLineWrap(true);
 			itemDesc.setWrapStyleWord(true);
@@ -1228,10 +1223,10 @@ public class MeriPanel extends JPanel {
 			itemClose.addActionListener(this);
 			itemClose.setAlignmentX(Component.LEFT_ALIGNMENT);
 			itemClose.setHorizontalAlignment(JLabel.LEFT);
-			
+
 			title.add(itemIcon);
 			title.add(itemName);
-			
+
 			inner.add(title);
 			inner.add(itemDesc);
 			holder.add(normalAbonus);
@@ -1241,7 +1236,7 @@ public class MeriPanel extends JPanel {
 			bottom.add(holder,BorderLayout.CENTER);
 			inner.add(bottom);
 			add(inner,BorderLayout.CENTER);
-			
+
 			setTitle("Equipment Info");
 			setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			pack();
@@ -1255,7 +1250,7 @@ public class MeriPanel extends JPanel {
 				int db=equip.getDefBonus(-1);
 				int spab=equip.getAtkBonus(equip.getBonusSpecies());
 				int spdb=equip.getDefBonus(equip.getBonusSpecies());
-				
+
 				itemIcon.setIcon(MConst.imageIconMap.get(selectedEquipID));
 				itemName.setText(equip.name);
 				itemDesc.setText(equip.getDesc());
@@ -1286,9 +1281,9 @@ public class MeriPanel extends JPanel {
 	 *
 	 */
 	private class VictoryPanel extends JPanel{
-		
+
 		private JPanel parent;
-		
+
 		private VictoryPanel(JPanel parent){
 			this.parent=parent;
 		}
@@ -1316,7 +1311,7 @@ public class MeriPanel extends JPanel {
 			g.drawString(victext, x, y);
 			g.setFont(new Font("Castellar", Font.BOLD, 14));
 			for (int i=0;i<victext2.length;i++){
-				g.drawString(victext2[i], x, y + (i+1)* (g.getFontMetrics(g.getFont()).getHeight()+ 4));				
+				g.drawString(victext2[i], x, y + (i+1)* (g.getFontMetrics(g.getFont()).getHeight()+ 4));
 			}
 		}
 	}
@@ -1324,9 +1319,9 @@ public class MeriPanel extends JPanel {
 	 * Displays a shield when starting
 	 */
 	private class IntroPanel extends JPanel implements MouseMotionListener, MouseListener {
-		
+
 		private boolean clicked=false;
-		
+
 		public IntroPanel(){
 			addMouseMotionListener(this);
 			addMouseListener(this);
@@ -1357,7 +1352,7 @@ public class MeriPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 		@Override
 		public void mouseMoved(MouseEvent arg0) {
@@ -1371,17 +1366,17 @@ public class MeriPanel extends JPanel {
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {

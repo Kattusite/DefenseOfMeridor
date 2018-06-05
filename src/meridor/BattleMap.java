@@ -23,13 +23,13 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	private int [] mouseLocation={0,0};
 	public MeriTile [][] tilemap;
 	private MeriPanel parent;
-	
+
 	//level is needed to restrict spawned items and enemies
-	public BattleMap (MeriPanel p){		
+	public BattleMap (MeriPanel p){
 		parent=p;
 
 		genBlankMap();
-		
+
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(getPaneSize()+2,getPaneSize()+2));
@@ -113,7 +113,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 							int[]coords=new int[]{0,1,2,3};
 							tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);
 							coords=new int[]{6,7,8,9};
-							tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);							
+							tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);
 						}
 					}
 				}
@@ -122,7 +122,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 					int[]coords=new int[]{0,1,2,3,4};
 					tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);
 					coords=new int[]{5,6,7,8,9};
-					tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);					
+					tilemap[coords[random.nextInt(coords.length)]][i].setTerrain(VILLAGE);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 		}
 		ArrayList<Integer>equipsAL=new ArrayList<Integer>(equips);
 		return equipsAL;
-		
+
 	}
 	/**
 	 * clear pet locations (prior to updating them)
@@ -236,7 +236,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	/**
 	 * 	The goal of this method is to get ordered list of nodes for enemy ai to check
 	 * 	behind first, front next, then sides from top to bottom
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @return an array of adjacent tiles
@@ -404,7 +404,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 		}
 		return vlocs;
 	}
-	
+
 	/**
 	 * Given a foe's location, searches for the first ally to be prioritized for attack
 	 * @param x
@@ -461,7 +461,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 			}
 		}
 //		if (destadj.size()>0){
-//			System.out.println(destadj.get(0)[0]+","+destadj.get(0)[1]);			
+//			System.out.println(destadj.get(0)[0]+","+destadj.get(0)[1]);
 //		}
 		return destadj;
 	}
@@ -470,7 +470,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	 * to get to a column with a village in it
 	 * It is intended to be multiplied by 2 and passed to findOneTilePath
 	 * -1 goes left, 1 goes right
-	 * 
+	 *
 	 * searches in both directions from the passed x ooordinate until it finds a village
 	 */
 	public int getNearestColumnMultiplier(int x){
@@ -482,7 +482,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 			}
 			if (x-i>=0 && checkVillageInColumn(x-i)){
 				direction=-1;
-				break;				
+				break;
 			}
 		}
 		return direction;
@@ -540,7 +540,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 		return Math.abs(ref[0]-mt.getGridx())<=2 && Math.abs(ref[1]-mt.getGridy())<=2;
 	}
 	/**
-	 * 
+	 *
 	 * @param clicked: a tile to check
 	 * @return true if the passed coordinate is next to the selected meripet in parent
 	 */
@@ -551,8 +551,23 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 					&& Math.abs(clicked[1]-parent.selected.getLocation()[1])<=1){
 				isadj=true;
 			}
-		} 
+		}
 		return isadj;
+	}
+	/**
+	 *
+	 * @param mp: a MeriPet to check
+	 * @return true if the passed pet is the selected meripet in parent
+	 */
+	public boolean isSelected(MeriPet mp){
+		boolean issel=false;
+		if (parent.selected!=null && mp!=null){
+			if (mp.getLocation()[0] == parent.selected.getLocation()[0] &&
+					mp.getLocation()[1] == parent.selected.getLocation()[1]){
+				issel=true;
+			}
+		}
+		return issel;
 	}
 	/**
 	 * set the terrain of a specific tile in the tilemap
@@ -570,18 +585,40 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 		this.setBackground(Color.white);
 		for (int i=0;i<MAPDIM;i++){
 			for (int j=0;j<MAPDIM;j++){
-				if (isAllyPetTerrain(tilemap[i][j].terrain)){
-					//if the terrain is of an ally, find the ally, check if it
-					//has exhausted its moves, and then depict appropriately
-					for (int k=0;k<parent.ally.size();k++){
-						if (Arrays.equals(parent.ally.get(k).getLocation(),new int[]{i,j}) &&
-								!parent.ally.get(k).hasMove()){
-							tilemap[i][j].drawMoveDepleted(g);
+				boolean issel=false;
+				// Draw the colored outlines around ally / foe troops
+				if (isFoePetTerrain(tilemap[i][j].terrain)){
+					for (int k=0; k<parent.foe.size();k++) {
+						if (Arrays.equals(parent.foe.get(k).getLocation(),new int[]{i,j})) {
+							tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
 							break;
 						}
 					}
 				}
+				if (isAllyPetTerrain(tilemap[i][j].terrain)){
+					//if the terrain is of an ally, find the ally, check if it
+					//has exhausted its moves, and then depict appropriately
+					for (int k=0;k<parent.ally.size();k++){
+						if (Arrays.equals(parent.ally.get(k).getLocation(),new int[]{i,j})) {
+							// Draw a colored outline around ally troop
+							if (!parent.ally.get(k).hasMove()){
+								tilemap[i][j].drawMoveDepleted(g);
+							} else {
+								tilemap[i][j].drawOutline(g, MeriPet.OUTLINE[k]);
+							}
+							// Flag selected pets to be greyed out later.
+							if (isSelected(parent.ally.get(k))) {
+								issel=true;
+							}
+							break;
+						}
+					}
+				}
+				// Draw the tile, greying out if selected.
 				tilemap[i][j].draw(g);
+				if (issel) {
+					tilemap[i][j].drawSelected(g);
+				}
 			}
 		}
 		if (parent.checkGameWon()){
@@ -608,12 +645,12 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	//get the coordinate of the player click and attempt to activate a warrior
 	//on that tile
@@ -626,7 +663,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 		} else if (!parent.checkGameLost()){
 			/*
 			 * If the game is lost, do nothing
-			 * 
+			 *
 			 * Otherwise, execute player interaction:
 			 */
 			//the intent of this method is to have the player only able to click
@@ -635,17 +672,19 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 			int mx=e.getX();
 			int my=e.getY();
 			int xc=0,yc=0;
-			if (mx<getPaneSize()){
+			if (mx>=0 && mx<getPaneSize()){
 				xc=mx/TILESIZE;
 			}
-			if (my<getPaneSize()){
+			if (my>=0 && my<getPaneSize()){
 				yc=my/TILESIZE;
 			}
 //			System.out.println(mx+" "+my+"/"+xc+" "+yc);
+			// TODO make this a petAt(int[]) function
 			//if no target selected, try to reference parent coordinates to find a pet
-			if (parent.selected==null){
+			// The repeated parent.movesLeft logic is undesirable and can be fixed rather easily
+			if (parent.selected==null && parent.movesLeft>0){
 				for (int i=0;i<parent.ally.size();i++){
-					if (Arrays.equals(parent.ally.get(i).getLocation(),new int[]{xc,yc}) 
+					if (Arrays.equals(parent.ally.get(i).getLocation(),new int[]{xc,yc})
 							&& parent.ally.get(i).hasMove()){
 						parent.setSelected(parent.ally.get(i));
 					}
@@ -669,7 +708,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 							break;
 						}
 					}
-				} 
+				}
 				//check for the healing case
 				else if (parent.selected.canHeal() && isAllyPetTerrain(tilemap[xc][yc].terrain)){
 					for (int i=0;i<parent.ally.size();i++){
@@ -681,10 +720,10 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 					}
 				}
 				/*
-				 * There is an obvious bug here: if a pet can simultaneously heal either seal,
+				 * There is an obvious BUG here: if a pet can simultaneously heal either seal,
 				 * the code won't actually let them heal both seals, and it won't heal tele seal
 				 * if the healer can ALSO cure heal seal if the target is not healsealed
-				 * 
+				 *
 				 * not relevant to the present build because abilities are almost completely unique
 				 */
 				//check for whether the pet can cure healseal
@@ -708,7 +747,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 					}
 				}
 				//check for the ranged attack case
-				else if (parent.selected.canRangeAttack() && 
+				else if (parent.selected.canRangeAttack() &&
 						isFoePetTerrain(tilemap[xc][yc].terrain) &&
 						checkTwoRange(tilemap[xc][yc],parent.selected.getLocation())){
 					for (int i=0;i<parent.foe.size();i++){
@@ -752,7 +791,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 						//pick up weapon
 						else if (isWeapon(tilemap[xc][yc].terrain)){
 							if (parent.selected.weapon>-1){
-								tilemap[parent.selected.getLocation()[0]][parent.selected.getLocation()[1]].setTerrain(parent.selected.weapon);					
+								tilemap[parent.selected.getLocation()[0]][parent.selected.getLocation()[1]].setTerrain(parent.selected.weapon);
 							}
 							parent.updateBattleLog(parent.selected.name+" equips a "+MConst.equipMap.get(tilemap[xc][yc].terrain).name+"!");
 							parent.selected.setWeapon(tilemap[xc][yc].terrain);
@@ -761,7 +800,7 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 							//pick up armor
 						} else if (isArmor(tilemap[xc][yc].terrain)){
 							if (parent.selected.armor>-1){
-								tilemap[parent.selected.getLocation()[0]][parent.selected.getLocation()[1]].setTerrain(parent.selected.armor);					
+								tilemap[parent.selected.getLocation()[0]][parent.selected.getLocation()[1]].setTerrain(parent.selected.armor);
 							}
 							parent.updateBattleLog(parent.selected.name+" equips a "+MConst.equipMap.get(tilemap[xc][yc].terrain).name+"!");
 							parent.selected.setArmor(tilemap[xc][yc].terrain);
@@ -775,17 +814,34 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 							parent.selected.setLocation(xc, yc);
 							parent.resolvePlayerMove();
 						}
-						//additional cases go here 
+						//additional cases go here
 						else {
-							//if ally pet, resolve special abilities: healing/disenchantments
-							parent.setSelected(null);
+							// if adjacent ally pet, select that one instead TODO modularize this
+							for (int i=0;i<parent.ally.size();i++){
+								if (Arrays.equals(parent.ally.get(i).getLocation(),new int[]{xc,yc})
+										&& parent.ally.get(i).hasMove()){
+									parent.setSelected(parent.ally.get(i));
+								}
+							}
+							//if ally pet, resolve special abilities: healing/disenchantments (TODO?)
+							//parent.setSelected(null);
 						}
 					} else {
-						//if ally pet, resolve special abilities: healing/disenchantments
+						// if movesealed:
+						//if ally pet, resolve special abilities: healing/disenchantments (TODO?)
 						parent.setSelected(null);
 					}
-			}
-
+				}
+				// if not adjacent:
+				else {
+					// if adjacent ally pet, select that one instead TODO modularize this
+					for (int i=0;i<parent.ally.size();i++){
+						if (Arrays.equals(parent.ally.get(i).getLocation(),new int[]{xc,yc})
+								&& parent.ally.get(i).hasMove()){
+							parent.setSelected(parent.ally.get(i));
+						}
+					}
+				}
 			}
 			updatePetLocations(parent.getPetLocations());
 		}
@@ -793,12 +849,12 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void mouseMoved(MouseEvent e) {
 		mouseLocation[0]=e.getX();

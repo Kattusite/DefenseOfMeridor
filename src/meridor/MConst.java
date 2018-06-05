@@ -17,13 +17,13 @@ import javax.swing.JOptionPane;
 public class MConst {
 	final static int TILESIZE=40;
 	final static boolean WEAPON=true;
-	
+
 	public final static String [] SHIELDTITLES = {
 			"Stablehand","Serf","Peon",
 			"Page","Squire","Guard",
 			"High Guard","Knight","Baron",
 			"Earl","Duke","Lord",};
-	
+
 	public enum DARKLORDS {D_BUZ,D_GRA};
 	private final static int noeffect=-1;
 	private final static int rangedatk=0;
@@ -33,7 +33,7 @@ public class MConst {
 	private final static int breaktele=4;
 	private final static boolean freetele=true;
 	private final static boolean freeatk=true;
-	
+
 	final static int MOEHOG=0;
 	final static int SKEITH=1;
 	final static int TECHO=2;
@@ -64,7 +64,7 @@ public class MConst {
 	final static int TRECHE=27;
 	final static int VASPLE=28;
 	final static int VICORB=29;
-	
+
 	final static int WMACE=30;
 	final static int WBSWO=31;
 	final static int WHAMM=32;
@@ -75,7 +75,7 @@ public class MConst {
 	final static int WHALB=37;
 	final static int WDAXE=38;
 	final static int SLIGH=39;
-	
+
 	final static int DTHUN=40;
 	final static int DTELE=41;
 	final static int DHELM=42;
@@ -92,9 +92,9 @@ public class MConst {
 	public static Map<Integer, Equip>equipMap=null;
 	public static Map<Integer, String>equipDescMap=null;
 	public static Map<String, Image>shieldMap=null;
-	
+
 	public static BufferedImage titleshield;
-	
+
 	public static void initItems(){
 		int [] emptyset=new int[]{};
 
@@ -114,7 +114,7 @@ public class MConst {
 					WEAPON,!freeatk,!freetele,
 					2,0,4,0,0,0,rangedatk,
 					new int[]{SCORCH},emptyset));
-			
+
 			equipMap.put(SFORC, new Equip("Magic Force Spell",SFORC,
 					WEAPON,!freeatk,!freetele,
 					3,0,5,0,0,0,forceheal,
@@ -135,7 +135,7 @@ public class MConst {
 					WEAPON,!freeatk,!freetele,
 					2,0,4,0,0,0,lightning,
 					new int[]{GRUNDO},emptyset));
-			
+
 			equipMap.put(DTHUN, new Equip("Magic Staff of Thunder",DTHUN,
 					!WEAPON,!freeatk,!freetele,
 					0,1,0,3,0,0,noeffect,
@@ -156,7 +156,7 @@ public class MConst {
 					!WEAPON,!freeatk,!freetele,
 					0,4,0,6,0,0,noeffect,
 					new int[]{TECHO},emptyset));
-			
+
 			equipMap.put(DLEAT, new Equip("Leather Armor",DLEAT,
 					!WEAPON,!freeatk,!freetele,
 					0,3,0,5,0,0,noeffect,
@@ -178,7 +178,7 @@ public class MConst {
 					0,3,0,5,0,0,breakheal,
 					new int[]{MOEHOG},emptyset));
 		}
-		
+
 		if (equipDescMap==null){
 			equipDescMap=new HashMap<Integer,String>();
 			equipDescMap.put(WMACE, "This weapon is often affectionately refered to as 'The Smasher', 'The Destroyer', 'The Crusher', 'The Evil Neopet Mincer'... well, there are too many names to list here, but you get the idea!");
@@ -234,7 +234,7 @@ public class MConst {
 		}
 		if (tileGraphicMap ==null){
 			tileGraphicMap=new HashMap<Integer,Image>();
-			try {				
+			try {
 				//terrain
 				tileGraphicMap.put(VILLAGE, ImageIO.read(new File("./MeriImages/vlg.jpg")));
 				tileGraphicMap.put(MOUNTAIN, ImageIO.read(new File("./MeriImages/mtn.jpg")));
@@ -269,7 +269,7 @@ public class MConst {
 				tileGraphicMap.put(TRECHE, ImageIO.read(new File("./MeriImages/Treasure_Chest.jpg")).getScaledInstance(TILESIZE, TILESIZE, Image.SCALE_AREA_AVERAGING));
 				tileGraphicMap.put(VASPLE, ImageIO.read(new File("./MeriImages/Vase_of_Plenty.jpg")).getScaledInstance(TILESIZE, TILESIZE, Image.SCALE_AREA_AVERAGING));
 				tileGraphicMap.put(VICORB, ImageIO.read(new File("./MeriImages/Orb.jpg")).getScaledInstance(TILESIZE, TILESIZE, Image.SCALE_AREA_AVERAGING));
-				
+
 				tileGraphicMap.put(WMACE, ImageIO.read(new File("./MeriImages/Mace.jpg")));
 				tileGraphicMap.put(WBSWO, ImageIO.read(new File("./MeriImages/Broadsword.jpg")));
 				tileGraphicMap.put(WHAMM, ImageIO.read(new File("./MeriImages/Hammer.jpg")));
@@ -280,7 +280,7 @@ public class MConst {
 				tileGraphicMap.put(WHALB, ImageIO.read(new File("./MeriImages/Halberd.jpg")));
 				tileGraphicMap.put(WDAXE, ImageIO.read(new File("./MeriImages/Double_Axe.jpg")));
 				tileGraphicMap.put(SLIGH, ImageIO.read(new File("./MeriImages/Magic_Lightening_Spell.jpg")));
-				
+
 				tileGraphicMap.put(DTHUN, ImageIO.read(new File("./MeriImages/Magic_Staff_of_Thunder.jpg")));
 				tileGraphicMap.put(DTELE, ImageIO.read(new File("./MeriImages/Amulet_of_Teleportation.jpg")));
 				tileGraphicMap.put(DHELM, ImageIO.read(new File("./MeriImages/Helmet.jpg")));
@@ -292,7 +292,7 @@ public class MConst {
 				tileGraphicMap.put(WDEFL, ImageIO.read(new File("./MeriImages/Sword_of_Deflection.jpg")));
 				tileGraphicMap.put(DCOUN, ImageIO.read(new File("./MeriImages/Counter_Enchantment_Helmet.jpg")));
 				System.out.println(tileGraphicMap.size());
-				
+
 				imageIconMap=new HashMap<Integer,ImageIcon>();
 				//I use the unintuitive, hacky method of setting j <= the map's size
 				//because one of the tiles is a blank, meaning the number of tiles is actually
@@ -310,7 +310,7 @@ public class MConst {
 	}
 	/**
 	 * Check if the tile is passable TO ENEMY CHARACTERS
-	 * 
+	 *
 	 * The checks for potions and items require a specific impl
 	 */
 	public static boolean checkTileIDPassable(int id){
@@ -389,7 +389,7 @@ public class MConst {
 	 */
 	public static String getEquipToolTipStats(int id){
 		if (equipMap.containsKey(id)){
-			return equipMap.get(id).getToolTipStats();	
+			return equipMap.get(id).getToolTipStats();
 		} else {
 			return null;
 		}
@@ -423,7 +423,7 @@ public class MConst {
 			return equipMap.get(id).teleport;
 		} else {
 			return 0;
-		} 
+		}
 	}
 	/**
 	 * Checks if the item allows movement after teleport

@@ -1,5 +1,6 @@
 package meridor;
 import java.io.Serializable;
+import java.awt.Color;
 import static meridor.MConst.*;
 
 /**
@@ -8,10 +9,10 @@ import static meridor.MConst.*;
  */
 public class MeriPet implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	final static int []STATCAPS={18,18,14};
 	final static int []STATCAPS2={21,19,14};
 	final static int[] CAMPAIGNS[]={STATCAPS,STATCAPS2};
@@ -24,14 +25,14 @@ public class MeriPet implements Serializable {
 			"Guardian"
 	};
 	final static int[]RANKREQS={3,9,32,64,96}; //the saves needed to get to each rank (listed above)
-	
+
 	final static Species [] SPEC ={
 			new Species (MOEHOG,"Moehog",3,15,8,8),
 			new Species (SKEITH,"Skeith",1,15,15,8),
 			new Species (TECHO,"Techo",2,15,8,8),
 			new Species (SCORCH,"Scorchio",2,15,10,8),
 			new Species (GRUNDO,"Grundo",2,15,10,8),
-			
+
 			new Species (D_MOE,"Draco Moehog",3,15,8,9),
 			new Species (D_SKE,"Draco Skeith",1,15,15,9),
 			new Species (D_TEC,"Draco Techo",2,15,8,9),
@@ -41,16 +42,37 @@ public class MeriPet implements Serializable {
 			new Species (D_GRA,"Draco Grarrl",2,15,10,9)
 	};
 
+	// A list of all the outline colors to be used for pets, in order of use
+	// i.e. First pet gets first color in list, and so on...
+	final static Color [] OUTLINE = {
+		Color.decode("0x000000"), // black
+		Color.decode("0x006600"), // forest green
+		Color.decode("0x00CD00"), // lime green
+		Color.decode("0x9A9A00"), // dark yellow green
+		Color.decode("0xFF9A00"), // orange
+		Color.decode("0x3000FF"), // royal blue
+		Color.decode("0x00009A"), // navy blue
+		Color.decode("0x309AFF"), // sky blue
+		Color.decode("0x999999"), // light grey
+		Color.decode("0x8034BF"), // purple
+		Color.decode("0x4E6A7D"), // dark blue-grey
+		Color.decode("0x5B472C"), // brown
+		Color.decode("0xFFD300"), // yellow
+		Color.decode("0xEFBBCC"), // light pink
+		Color.decode("0xFF1493")  // bright pink
+	};
+
 	final static int HP = 0;
 	final static int ATK = 1;
 	final static int DEF = 2;
-	
+
 	final static int VILLAGER = -1;
-	
+
 	String name;
 	final Species species; //contains racial information for the pet
 	int[] stats={10,5,5}; //contains current base stats
 	int dmg; //current damage taken by the pet
+//	int rank; //the current level of the npet, max is 5
 	int saves; //the stat for experience
 	int weapon; //the id of the item equipped
 	int armor; //id of the item equipped
@@ -59,13 +81,13 @@ public class MeriPet implements Serializable {
 	private int[]location;
 	boolean promoted; //whether the pet has been promoted in the current set of battles CLEAR AFTER EACH SET
 	boolean movesealed,healsealed,telesealed; //status effects that can be inflicted on a pet
-	
+
 	/**
 	 * Minimum constructor for a generic npet includes:
 	 * name
 	 * species (id)
 	 * spawn condition (ally, or foe of various battles)
-	 * 
+	 *
 	 * @param n
 	 * @param sid
 	 * @param sc
@@ -79,7 +101,7 @@ public class MeriPet implements Serializable {
 		dmg=0;
 		moves=0;
 		tele=0;
-		
+
 		promoted=false;
 		movesealed=false;
 		healsealed=false;
@@ -107,16 +129,16 @@ public class MeriPet implements Serializable {
 		dmg=0;
 		moves=0;
 		tele=0;
-		
+
 		promoted=false;
 		movesealed=false;
 		healsealed=false;
 		telesealed=false;
-		
+
 		int hp=0;
 		int at=0;
 		int de=0;
-		
+
 		if (st[1]==st[2]){
 			hp=st[1];
 		} else {
@@ -132,7 +154,7 @@ public class MeriPet implements Serializable {
 		} else {
 			de=st[5]+random.nextInt(st[6]-st[5]);
 		}
-		
+
 		stats=new int[]{hp,at,de};
 
 	}
@@ -149,13 +171,13 @@ public class MeriPet implements Serializable {
 		dmg=0;
 		moves=0;
 		tele=0;
-		
+
 		setLocation(other.getLocation());
 		promoted=false;
 		movesealed=false;
 		healsealed=false;
 		telesealed=false;
-		
+
 		stats=other.stats;
 	}
 	/**
@@ -171,13 +193,13 @@ public class MeriPet implements Serializable {
 		dmg=0;
 		moves=0;
 		tele=0;
-		
+
 		setLocation(other.getLocation());
 		promoted=other.promoted && true;
 		movesealed=false;
 		healsealed=false;
 		telesealed=false;
-		
+
 		stats=other.stats.clone();
 	}
 	/**
@@ -243,7 +265,7 @@ public class MeriPet implements Serializable {
 	/**
 	 * Lazy initialization
 	 * returns an "array-tuple" 2 units long, corresponding to x and y value
-	 * 
+	 *
 	 * 	I'm not sure about the implementation of location as an array
 	 * 	this implementation is intended to require the gamestate to
 	 * 	loop through list of player/foe pets to see which coord lines up with a click
@@ -344,7 +366,7 @@ public class MeriPet implements Serializable {
 							rank++;
 						}
 					}
-				} 
+				}
 			}
 		}
 		return rank;
@@ -392,7 +414,7 @@ public class MeriPet implements Serializable {
 			return 0;
 	}
 	/**
-	 * Checks the currently equipped weapon, and gets its species-specific 
+	 * Checks the currently equipped weapon, and gets its species-specific
 	 * defense bonus
 	 * crossrefs constants
 	 * might be incorporated into attack calc
@@ -473,7 +495,7 @@ public class MeriPet implements Serializable {
 	 */
 	public static String heal (MeriPet a, MeriPet d){
 		int net = (a.stats[ATK]+a.getWeaponBonus()+getASbonus(a.stats[ATK]))/2;
-		String battlelog=a.name+" heals "+d.name+" of "+Math.min(d.dmg, net)+
+		String battlelog=a.name+" heals "+d.name+" of "+net+
 				" damage!";
 		System.out.println(battlelog); //placeholder?
 		d.heal(net);
@@ -538,7 +560,7 @@ public class MeriPet implements Serializable {
 				+ " HP:"+stats[HP]
 				+ " ATK:"+stats[ATK]+"+"+getASbonus(stats[ATK])
 				+ " DEF:"+stats[DEF];
-				
+
 	}
 	/**
 	 * Used to see if the npet has available individual moves left
@@ -572,7 +594,7 @@ public class MeriPet implements Serializable {
 		if (MConst.equipHasFreeTele(weapon) || MConst.equipHasFreeTele(armor)){
 			moves++; //to negate the loss in move from moving once
 			movesealed=true;
-		} 
+		}
 	}
 	/**
 	 * returns true if dmg>health
@@ -639,7 +661,7 @@ public class MeriPet implements Serializable {
 	}
 	private static class Species implements Serializable {
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		/*
@@ -653,7 +675,7 @@ public class MeriPet implements Serializable {
 		String name;
 		int moves;
 		int[]basestats;
-		
+
 		public Species (int id, String n, int m, int h, int a, int d){
 			spid=id;
 			name=n;
