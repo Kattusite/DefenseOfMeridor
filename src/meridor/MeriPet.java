@@ -548,7 +548,9 @@ public class MeriPet implements Serializable {
 		} else {
 			int sid=getAllyVersionOfFoe(getSpeciesID());
 			if (sid>=0){
-				return new MeriPet(this,getAllyVersionOfFoe(getSpeciesID()));
+				MeriPet newFoe = new MeriPet(this,getAllyVersionOfFoe(getSpeciesID()));
+				newFoe.refreshMove();
+				return newFoe;
 			} else {
 				return null;
 			}

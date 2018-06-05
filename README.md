@@ -7,11 +7,11 @@ To-done
 * Desired behavior when running out of moves: Deselect current pet, disable further selection of pets.
 * When you click on the battlemap and have no moves left, prompt to end turn
 * Selecting a pet after you run out of moves causes pet to remain greyed out. More to the point, clicking on a pet after you run out of moves does not deselect it.
+* Make it so troops that were just converted this turn can still move.
 
 To - do
 =======
 ## Troop Selecting / Outlining
-* Make it so troops that were just converted this turn can still move.
 * Troop outline colors should also be shown in the troop info screen on the right hand side of the MeriFrame.
 * When the game has been won, remove all troop outlines.
 
