@@ -10,6 +10,8 @@ To-done
 * Make it so troops that were just converted this turn can still move.
 * When the game has been won, remove all troop outlines.
 * Troop outline colors should also be shown in the troop info screen on the right hand side of the MeriFrame.
+* Change battlelog from textarea to textpane
+* Clicking the pet that is already selected should deselect it.
 
 To - do
 =======
@@ -25,7 +27,6 @@ To - do
 
 ## Battlelog changes
 * Add a battlelog message for finding the artifact.
-* Change battlelog from textarea to textpane
 * Make the combat log more visually obvious (e.g. boldface)
 
 ## General Bugs
@@ -34,6 +35,8 @@ To - do
 * Selecting / Unselecting a pet causes the mission info to wiggle back and forth a little bit.
 * Selecting a pet technically redraws the grey "selected" overlay box a pixel too large, but it looks fine so I didn't bother to change it.
 * Images do not load at all from the jar file, instead they must load from a local folder named "MeriImages"
+* Likewise the font for "Victory Click the Map to continue" is not available on all systems and needs to be loaded from jar somehow.
+* Should pets be able to target themselves (e.g. if a healing grundo clicks itself will the heal go through or will the grundo deselect?)
 
 ## Programming QoL fixes
 * Better helper functions (e.g. for checking location / equality of pets)

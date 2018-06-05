@@ -697,6 +697,11 @@ public class BattleMap extends JPanel implements ActionListener,MouseListener,Mo
 						}
 					}
 				}
+				// If the already selected pet was clicked, deselect it
+				// Obvious BUG(?) it is not possible for a pet to target (eg heal) itself
+				else if (Arrays.equals(parent.selected.getLocation(), new int[]{xc, yc})) {
+					parent.setSelected(null);
+				}
 				//if the pet can act, check to see what actions are appropriate
 				else {
 					//teleport to blank squares only

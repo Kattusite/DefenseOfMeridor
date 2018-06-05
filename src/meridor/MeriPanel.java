@@ -1030,13 +1030,14 @@ public class MeriPanel extends JPanel {
 	 */
 	private class BattleLog extends JPanel {
 
-		JTextArea text;
+		JTextPane text;
 
 		private BattleLog (){
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			setLayout(new BorderLayout());
-			text=new JTextArea("");
+			text=new JTextPane();
 			text.setEditable(false);
+			text.setContentType("text/html");
 			JScrollPane jsp=new JScrollPane(text);
 
 			text.setPreferredSize(new Dimension(500,120));
@@ -1046,7 +1047,7 @@ public class MeriPanel extends JPanel {
 		private void updateText (){
 			String blt="";
 			for (int i=0;i<battlelogtext.size();i++){
-				blt+=battlelogtext.get(i)+"\n";
+				blt+=battlelogtext.get(i)+"<br>\n";
 			}
 			text.setText(blt);
 			revalidate();
