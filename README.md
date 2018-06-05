@@ -19,7 +19,11 @@ To - do
 * Better helper functions (e.g. for checking location / equality of pets)
 * toString() for MeriPet
 * The "Victory Click the Map to Continue" screen could use a semi-transparent background.
-* When you click on the battlemap and have no moves left, prompt to end turn.
+* When you click on the battlemap and have no moves left, prompt to end turn
+
+## Battlelog changes
+* Add a battlelog message for finding the artifact.
+* Change battlelog from textarea to textpane
 
 ## General Bugs
 * There is a missed case if it is possible to both heal TPseal and healseal, so it is not always possible to heal correctly.
