@@ -253,6 +253,13 @@ public class MeriPanel extends JPanel {
 		update();
 	}
 	/**
+	 * Press the end turn button
+	 */
+	public void pressEndTurn (){
+		im.endturnbutton.doClick(0);
+		update();
+	}
+	/**
 	 * Implementation to do whatever necessary to destroy a village
 	 * May change later
 	 * NOTE: The actual text from the original was "A village has been sacked!"
