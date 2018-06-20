@@ -24,6 +24,7 @@ To - do
 * Make the outline around each game tile about a pixel smaller (or alternatively make the black lines between cells a little thicker)
 * The "Victory Click the Map to Continue" screen could use a semi-transparent background.
 * Allow "click to restart" on game loss, instead of "why not restart from the menu?"
+* The rank titles have changed a little from the original (ie the rank at 9 saves is called "Warrior" instead of "Soldier")
 
 ## Battlelog changes
 * Add a battlelog message for finding the artifact.
